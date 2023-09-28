@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1280, initial-scale=0.5">
+    <title>Pantalla de Control</title>
+    <style>
+        body {
+            font-family: 'Century Gothic', sans-serif;
+            background-color: #0C2D48;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            height: 100vh;
+        }
+
+        .header {
+            width: 80%;
+            padding: 1%;
+            padding-top: 10%;
+            background-color: #0C2D48;
+            color: #fff;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .header-right {
+            text-align: right;
+        }
+
+        .container {
+            display: flex;
+            width: 80%;
+            margin-top: 10px;
+        }
+
+        .sidebar {
+            width: 30%;
+            background-color: #fff;
+            padding: 2%;
+            margin-right: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            color: #111111;
+        }
+
+        .content {
+            width: 70%;
+            padding: 2%;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            background-color: #fff;
+            color: #111111;
+        }
+
+        .machine-info {
+            text-align: center;
+        }
+
+        .machine-name {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .machine-client {
+            font-size: 14px;
+            color: #fff;
+        }
+
+        .runtime {
+            font-size: 30px;
+            font-weight: bold;
+            margin-top: 5px;
+            color: #111111;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .production-info {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .production-label {
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .production-value {
+            font-size: 14px;
+        }
+
+        .history-table {
+            width: 100%;
+            margin-top: 10px;
+            border-collapse: collapse;
+        }
+
+        .history-table th,
+        .history-table td {
+            padding: 10px;
+            text-align: center;
+        }
+
+        .history-table th {
+            background-color: #0C2D48;
+            color: #fff;
+        }
+
+        .floating-div {
+            position: fixed;
+            top: 2%;
+            right: 2%;
+            width: 25%;
+            height: 2%;
+            background-color: #39a633;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: #fff;
+        }
+        /* The Modal (background) */
+        .modal {
+        display: none; /* Hidden by default */
+        position: fixed; /* Stay in place */
+        z-index: 1; /* Sit on top */
+        left: 0;
+        top: 0;
+        width: 100%; /* Full width */
+        height: 100%; /* Full height */
+        overflow: auto; /* Enable scroll if needed */
+        background-color: rgb(0,0,0); /* Fallback color */
+        background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+
+        /* Modal Header */
+        .modal-header {
+        padding: 2px 16px;
+        background-color: #0C2D48;
+        color: white;
+        }
+
+        /* Modal Body */
+        .modal-body {padding: 2px 16px;}
+
+        /* Modal Footer */
+        .modal-footer {
+        padding: 2px 16px;
+        background-color: #0C2D48;
+        color: white;
+        }
+
+        /* Modal Content */
+        .modal-content {
+        position: relative;
+        background-color: #fefefe;
+        margin: auto;
+        padding: 0;
+        border: 1px solid #888;
+        width: 80%;
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+        animation-name: animatetop;
+        animation-duration: 0.4s
+        }
+
+        /* Add Animation */
+        @keyframes animatetop {
+        from {top: -300px; opacity: 0}
+        to {top: 0; opacity: 1}
+        }
+
+        /* The Close Button */
+        .close {
+        color: #aaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+        }
+
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <div class="header-left">
+            <div class="machine-name">Name: Máquina 1</div>
+            <div class="machine-client">Engitecs</div>
+        </div>
+        <div class="header-right">
+            <div class="current-time"></div>
+            <div class="machine-status">Status: Running</div>
+        </div>
+    </div>
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+        <div class="modal-header">
+            <span class="close">&times;</span>
+            <h2>Status: Stop</h2>
+        </div>
+        <div class="modal-body">
+            <input type="radio" name="reason" value="tiempocompleto"> Razon X<br>
+
+            <input type="radio" name="reason" value="mediodia"> Razon Y<br>
+
+            <input type="radio" name="reason" value="sinempleo"> Razon Z
+        </div>
+        <div class="modal-footer">
+            <h3>Xperta SAS</h3>
+        </div>
+        </div>
+    </div>
+    <div id="floating-success" class="floating-div" style="display: none;">
+        Connected successfully.
+    </div>
+    <div id="floating-fail" class="floating-div" style="display: none;">
+        Connection failure.
+    </div>
+    <div class="container">
+        <div class="sidebar">
+            <div class="production-info">
+                <div class="production-label">Speed operation:</div>
+                <div class="production-value" id="speed-operation">-- units/min</div>
+            </div>
+            <div class="production-info">
+                <div class="production-label">Factor production:</div>
+                <div class="production-value" id="factor-production">-- units</div>
+            </div>
+            <div class="production-info">
+                <div class="production-label">Factor package:</div>
+                <div class="production-value">-- units</div>
+            </div>
+            <div class="production-info">
+                <div class="production-label">Max microstop time:</div>
+                <div class="production-value">-- Minutes</div>
+            </div>
+        </div>
+        <div class="content">
+            <div id="machine-info" class="machine-info" >
+                <div class="runtime">--:--:-- </div>
+                <div class="runtime" style="font-size: 12px;">Work time</div>
+            </div>
+
+            <table class="history-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Hour</th>
+                        <th>Time Stop</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>2023-09-25</td>
+                        <td>10:15 AM</td>
+                        <td>1h 30m 15s</td>
+                    </tr>
+                    <tr>
+                        <td>2023-09-24</td>
+                        <td>03:45 PM</td>
+                        <td><%= title %></td>
+                    </tr>
+                    <tr>
+                        <td>2023-09-24</td>
+                        <td>08:45 PM</td>
+                        <td>4m 20s</td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        //Socket.io-client
+        const socket = io("http://localhost:3000");
+    </script>
+    <script src="./socket/socketStatus.js"></script>
+    <script src="./socket/signalOnoff.js"></script>
+    <script src="./socket/signalUnitCount.js"></script>
+    <script src="./internet/internetStatus.js"></script>
+    <script>
+        // Mostrar la hora actual
+        function updateCurrentTime() {
+            const currentTimeElement = document.querySelector(".current-time");
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, "0");
+            const minutes = now.getMinutes().toString().padStart(2, "0");
+            const seconds = now.getSeconds().toString().padStart(2, "0");
+            const currentTimeString = `${hours}:${minutes}:${seconds}`;
+            currentTimeElement.textContent = currentTimeString;
+        }
+
+        function updateRuntime() {
+            const runtimeElement = document.querySelector(".runtime");
+            const now = new Date();
+            const runtime = now.getTime() - new Date(2023, 8, 27, 23, 0, 0).getTime();
+            const runtimeDays = Math.floor(runtime / 86400000).toString().padStart(2, "0");
+            const runtimeHours = Math.floor((runtime % 86400000) / (1000 * 60 * 60)).toString().padStart(2, "0");
+            const runtimeMinutes = Math.floor((runtime % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, "0");
+            const runtimeSeconds = Math.floor((runtime % (1000 * 60)) / 1000).toString().padStart(2, "0");
+            const runtimeString = `${runtimeDays > 0 ? runtimeDays + "d " : ""} ${runtimeHours}:${runtimeMinutes}:${runtimeSeconds}`;
+            runtimeElement.textContent = runtimeString;
+        }
+
+        // Actualizar la hora actual y la diferencia cada segundo
+        setInterval(() => {
+            updateCurrentTime();
+            updateRuntime();
+        }, 1000);
+
+        // Llamar a updateCurrentTime y updateRuntime para mostrar la hora inicial
+        updateCurrentTime();
+        updateRuntime();
+    </script>
+</body>
+
+</html>
