@@ -13,9 +13,8 @@ function updateCurrentTime() {
   currentTimeElement.textContent = currentTimeString;
 }
 
-updateCurrentTime();
 
-const time = setInterval(() => {
+const hourNow = setInterval(() => {
   updateCurrentTime();
 }, 1000);
 
