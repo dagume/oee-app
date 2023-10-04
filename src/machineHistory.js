@@ -4,12 +4,12 @@ const { setRPushInCache, getLastLRangeInCache } = require('./models/redisReposit
 
 socket.on('machine:history', (data) => {
   console.log(data.time);
-  const key = 'history'; //ENV
+  const key = 'history-test4'; //ENV
   setRPushInCache(key, data.time);
 });
 
 socket.on('machine:init', async (data) => {
-  const key = 'history'; //ENV
+  const key = 'history-test4'; //ENV
   const lastData = await getLastLRangeInCache(key);
   console.log(lastData);
   if (lastData === undefined) {

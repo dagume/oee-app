@@ -3,9 +3,10 @@ let productionValue = document.getElementById('speed-operation')
 let statusCircle = document.getElementById('status-circle')
 let machineSatus = document.getElementById('machine-satus')
 let modal = document.getElementById("myModal");
-let timerId = null
-let timerRun = null
-let timerStop = null
+let timerId
+let timerRun
+let timerStop
+let newRun = true;
 modal.style.display = "none";
 
 /**
@@ -15,18 +16,18 @@ modal.style.display = "none";
  * @param {Object} data - The unit count data received from the server.
  */
 socket.on('unitCount', (data) => {
+  clearTimeout(timerInit)
   productionValue.innerHTML = data.count + ` units/min`
   machineSatus.innerHTML = "Running <span id=\"status-circle\" class=\"status-circle\" style=\"background-color: #39a633;\"></span>";
+  // clearInterval(timerStop);
   clearInterval(timerStop);
-
-  if (timerStop !== null) {
+  if (newRun) {
+    newRun = false;
     const nowDate = sendDataRedis('machine:history');
     timerRun = setInterval(() => {
       updateRuntime(nowDate);
     }, 1000);
   }
-
-  timerStop = null;
 
   if (modal.style.display === "block") {
     hideModal(modal);
@@ -36,7 +37,7 @@ socket.on('unitCount', (data) => {
 
   timerId = setTimeout(() => {
     adminModal(machineSatus, modal);
-  }, 5000);
+  }, 2000);
 })
 
 /**
@@ -53,8 +54,8 @@ function hideModal(modal) {
  * @param {HTMLElement} modal - The modal element to be displayed.
  */
 function adminModal(machineSatus, modal) {
+  newRun = true;
   clearInterval(timerRun);
-  timerRun = null;
   const nowDate = sendDataRedis('machine:history');
   timerStop = setInterval(() => {
     updateRuntime(nowDate);
