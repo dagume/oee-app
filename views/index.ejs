@@ -7,8 +7,8 @@
     <title>Pantalla de Control</title>
     <style>
         body {
-            font-family: 'Century Gothic', sans-serif;
-            background-color: #0C2D48;
+            font-family: Verdana, Tahoma, sans-serif;
+            background-color: #33467A;
             margin: 0;
             padding: 0;
             display: flex;
@@ -22,7 +22,7 @@
             width: 80%;
             padding: 1%;
             padding-top: 10%;
-            background-color: #0C2D48;
+            background-color: #33467A;
             color: #fff;
             display: flex;
             justify-content: space-between;
@@ -44,7 +44,8 @@
             padding: 2%;
             margin-right: 10px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            color: #111111;
+            color: #33467A;
+            border-radius: 10px;
         }
 
         .content {
@@ -53,10 +54,12 @@
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             background-color: #fff;
             color: #111111;
+            border-radius: 10px;
         }
 
         .machine-info {
             text-align: center;
+            color: #33467A;
         }
 
         .machine-name {
@@ -70,10 +73,10 @@
         }
 
         .runtime {
-            font-size: 30px;
+            font-size: 50px;
             font-weight: bold;
             margin-top: 5px;
-            color: #111111;
+            color: #33467A;
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
         }
 
@@ -101,10 +104,11 @@
         .history-table td {
             padding: 10px;
             text-align: center;
+            color: #33467A;
         }
 
         .history-table th {
-            background-color: #0C2D48;
+            background-color: #33467A;
             color: #fff;
         }
 
@@ -189,6 +193,14 @@
         cursor: pointer;
         }
 
+        .status-circle {
+          display: inline-block;
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          background-color: #a63533;
+        }
+
     </style>
 </head>
 
@@ -199,8 +211,8 @@
             <div class="machine-client">Engitecs</div>
         </div>
         <div class="header-right">
-            <div class="current-time"></div>
-            <div class="machine-status">Status: Running</div>
+          <div class="current-time"></div>
+          <div id="machine-satus" class="machine-status">Stopped <span id="status-circle" class="status-circle"></span></div>
         </div>
     </div>
     <div id="myModal" class="modal">
@@ -249,7 +261,7 @@
         <div class="content">
             <div id="machine-info" class="machine-info" >
                 <div class="runtime">--:--:-- </div>
-                <div class="runtime" style="font-size: 12px;">Work time</div>
+                <div class="runtime" style="font-size: 10px;">Work time</div>
             </div>
 
             <table class="history-table">
@@ -281,49 +293,20 @@
             </table>
         </div>
     </div>
-    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://cdn.socket.io/4.6.0/socket.io.min.js" integrity="sha384-c79GN5VsunZvi+Q/WObgk2in0CbZsHnjEqvFxC5DxHn9lTfNce2WW6h2pH6u/kF+" crossorigin="anonymous"></script>
+    <!-- <script src="/socket.io/socket.io.js"></script> -->
     <script>
         //Socket.io-client
         const socket = io("http://localhost:3000");
     </script>
+    <script src="./time/now.js"></script>
+    <script src="./time/timer.js"></script>
     <script src="./socket/socketStatus.js"></script>
     <script src="./socket/signalOnoff.js"></script>
-    <script src="./socket/signalUnitCount.js"></script>
+    <script src="./socket/socketInit.js"></script>
+    <script src="./socket/unitsSign.js"></script>
     <script src="./internet/internetStatus.js"></script>
-    <script>
-        // Mostrar la hora actual
-        function updateCurrentTime() {
-            const currentTimeElement = document.querySelector(".current-time");
-            const now = new Date();
-            const hours = now.getHours().toString().padStart(2, "0");
-            const minutes = now.getMinutes().toString().padStart(2, "0");
-            const seconds = now.getSeconds().toString().padStart(2, "0");
-            const currentTimeString = `${hours}:${minutes}:${seconds}`;
-            currentTimeElement.textContent = currentTimeString;
-        }
 
-        function updateRuntime() {
-            const runtimeElement = document.querySelector(".runtime");
-            const now = new Date();
-            const runtime = now.getTime() - new Date(2023, 8, 27, 23, 0, 0).getTime();
-            const runtimeDays = Math.floor(runtime / 86400000).toString().padStart(2, "0");
-            const runtimeHours = Math.floor((runtime % 86400000) / (1000 * 60 * 60)).toString().padStart(2, "0");
-            const runtimeMinutes = Math.floor((runtime % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, "0");
-            const runtimeSeconds = Math.floor((runtime % (1000 * 60)) / 1000).toString().padStart(2, "0");
-            const runtimeString = `${runtimeDays > 0 ? runtimeDays + "d " : ""} ${runtimeHours}:${runtimeMinutes}:${runtimeSeconds}`;
-            runtimeElement.textContent = runtimeString;
-        }
-
-        // Actualizar la hora actual y la diferencia cada segundo
-        setInterval(() => {
-            updateCurrentTime();
-            updateRuntime();
-        }, 1000);
-
-        // Llamar a updateCurrentTime y updateRuntime para mostrar la hora inicial
-        updateCurrentTime();
-        updateRuntime();
-    </script>
 </body>
 
 </html>

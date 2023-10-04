@@ -5,4 +5,4 @@ setInterval(() => {
     } else {
         console.log("El dispositivo no está conectado a Internet");
     }
-}, 50000);
+}, 120000);
