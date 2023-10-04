@@ -20,7 +20,7 @@ socket.on('unitCount', (data) => {
   clearInterval(timerStop);
 
   if (timerStop !== null) {
-    const nowDate = sendDataRedis();
+    const nowDate = sendDataRedis('machine:history');
     timerRun = setInterval(() => {
       updateRuntime(nowDate);
     }, 1000);
@@ -55,7 +55,7 @@ function hideModal(modal) {
 function adminModal(machineSatus, modal) {
   clearInterval(timerRun);
   timerRun = null;
-  const nowDate = sendDataRedis();
+  const nowDate = sendDataRedis('machine:history');
   timerStop = setInterval(() => {
     updateRuntime(nowDate);
   }, 1000);
@@ -67,9 +67,9 @@ function adminModal(machineSatus, modal) {
  * Sends data to Redis and emits a 'machine:history' event with the current time.
  * @returns {number} The current time in milliseconds.
  */
-function sendDataRedis() {
+function sendDataRedis(channel) {
   const now = new Date().getTime();
-  socket.emit('machine:history', {
+  socket.emit(channel, {
     time: now
   });
   return now;

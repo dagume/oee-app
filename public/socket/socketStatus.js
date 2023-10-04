@@ -12,9 +12,7 @@ socket.on('connect', () => {
   floatingSuccess.style.display = "block";
   floatingFail.style.display = "none";
   machineInfo.style.display = "block";
-  // socket.emit('machine:init', {
-  //   time: now
-  // });
+  sendDataRedis('machine:init');
   setTimeout(function () {
     floatingSuccess.style.display = "none";
   }, 3000);
